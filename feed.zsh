@@ -1,16 +1,19 @@
 #!/usr/bin/env zsh
 
-version="0.1.0"
+version="0.2.0"
+
+if ! command -v newsboat &>/dev/null; then
+    echo "Command \`newsboat\` not found, please install it first."
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        echo "You can install it with \`brew install newsboat\`."
+    fi
+    echo "See https://newsboat.org/ for more information."
+    exit 1
+fi
 
 NEWSBOAT_URL_FILE=$(newsboat -h | grep -o -E 'feed URLs:.*' | cut -d ':' -f 2 | sed 's/ //g')
 NEWSBOAT_CONFIG_FILE=$(newsboat -h | grep -o -E 'configuration:.*' | cut -d ':' -f 2 | sed 's/ //g')
 NEWSBOAT_CACHE_FILE=$(newsboat -h | grep -o -E 'cache:.*' | cut -d ':' -f 2 | sed 's/ //g')
-
-
-if ! command -v newsboat &>/dev/null; then
-    echo "Command \`newsboat\` not found, please install it first."
-    exit 1
-fi
 
 usage() {
     cat <<EOF
@@ -19,26 +22,37 @@ feed - a minimal command wrapper for newsboat [version $version]
 
 Usage: feed <command> [options]
 
-Commands:
-    add     Add a feed URL
-    remove  Remove a feed URL
-    list    List all feed URLs
-    edit    Edit feed URLs
-    config  Edit newsboat config
+Commands: [add, remove, list, edit, config, help]
+EOF
+}
 
-Options:
-    -h, --help
+help() {
+    cat <<EOF
+
+feed - a minimal command wrapper for newsboat [version $version]
+
+Usage: feed <command> [options]
+
+Commands:
+    add <url>       Add a feed URL.
+    remove <url>    Remove a feed URL.
+    list            List all feed URLs.
+    edit            Edit the feed URL file.
+    config          Edit the newsboat config file.
+    help            Show this help message.
+
+Any unrecognized commands or options will be passed to newsboat.
 
 Examples:
     
-        Add a feed URL:
-            $ feed add https://example.com/feed.xml
-    
-        Remove a feed URL:
-            $ feed remove https://example.com/feed.xml
-    
-        Get help for a specific command:
-            $ feed help add
+    Add a feed URL:
+        $ feed add https://example.com/feed.xml
+
+    Remove a feed URL:
+        $ feed remove https://example.com/feed.xml
+
+    Get help for a specific command:
+        $ feed help add
 EOF
 }
 
@@ -101,8 +115,11 @@ case "$1" in
     config)
         config
         ;;
+    help)
+        help
+        ;;
     *)
         command newsboat "$@"
-        exit 0
+        exit $?
         ;;
 esac
