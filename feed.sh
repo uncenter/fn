@@ -1,6 +1,6 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env sh
 
-version="0.3.0"
+version="0.3.1"
 
 if ! command -v newsboat &>/dev/null; then
     echo "Command \`newsboat\` not found, please install it first."
