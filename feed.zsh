@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-version="0.2.0"
+version="0.3.0"
 
 if ! command -v newsboat &>/dev/null; then
     echo "Command \`newsboat\` not found, please install it first."
@@ -22,7 +22,7 @@ feed - a minimal command wrapper for newsboat [version $version]
 
 Usage: feed <command> [options]
 
-Commands: [add, remove, list, edit, config, help]
+Commands: [add, remove, list, edit, config, launch|start|run, help]
 EOF
 }
 
@@ -39,6 +39,8 @@ Commands:
     list            List all feed URLs.
     edit            Edit the feed URL file.
     config          Edit the newsboat config file.
+    launch, start, run
+                    Launch newsboat.
     help            Show this help message.
 
 Any unrecognized commands or options will be passed to newsboat.
@@ -117,6 +119,11 @@ case "$1" in
         ;;
     help)
         help
+        ;;
+    launch|start|run)
+        shift
+        command newsboat "$@"
+        exit $?
         ;;
     *)
         command newsboat "$@"
