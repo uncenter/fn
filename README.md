@@ -2,6 +2,8 @@
 
 Feed is a simple wrapper around [newsboat](https://newsboat.org/) to make it easier to launch, configure, and manage your feeds.
 
+See [Installation](#installation) to get started, update, or uninstall.
+
 ## Usage
 
 ```sh
