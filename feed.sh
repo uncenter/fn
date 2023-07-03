@@ -2,7 +2,7 @@
 
 name="feed"
 version="0.3.2"
-description="a command wrapper for newsboat"
+description="newsboat's missing cli"
 header=$(echo "$name - $description [version $version]\n\nUsage: $name <command>")
 
 if ! command -v newsboat &>/dev/null; then
@@ -43,14 +43,7 @@ Commands:
     help            Show this help message.
 
 Any unrecognized commands or options will be passed to newsboat.
-
-Examples:
-    
-    Add a feed URL:
-        $ $name add https://example.com/feed.xml
-
-    Remove a feed URL:
-        $ $name remove https://example.com/feed.xml
+Open an issue or uninstall at https://github.com/uncenter/feed-newsboat.
 EOF
 }
 

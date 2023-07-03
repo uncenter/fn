@@ -1,4 +1,6 @@
-# `feed` - a command wrapper for `newsboat`
+# `feed` - newsboat's missing cli
+
+Feed is a simple wrapper around [newsboat](https://newsboat.org/) to make it easier to launch, configure, and manage your feeds.
 
 ## Usage
 
