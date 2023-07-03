@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-version="0.3.1"
+version="0.3.2"
 
 if ! command -v newsboat &>/dev/null; then
     echo "Command \`newsboat\` not found, please install it first."
@@ -52,9 +52,6 @@ Examples:
 
     Remove a feed URL:
         $ feed remove https://example.com/feed.xml
-
-    Get help for a specific command:
-        $ feed help add
 EOF
 }
 
@@ -64,7 +61,7 @@ add() {
         exit 1
     fi
     if [[ $1 != http://* && $1 != https://* ]]; then
-        echo "Please specify a valid feed URL."
+        echo "Please specify a valid feed URL (must start with http:// or https://)."
         exit 1
     fi
     if [[ $(grep "$1" "$NEWSBOAT_URL_FILE") ]]; then
@@ -80,20 +77,24 @@ remove() {
         echo "Please specify a feed to remove."
         exit 1
     fi
+    if [[ ! $(grep "$1" "$NEWSBOAT_URL_FILE") ]]; then
+        echo "Feed $1 does not exist. Run \`feed list\` to see all feeds."
+        exit 1
+    fi
     echo "Removing feed "$1"..."
     sd "\n$1|${1}\n" "" "$NEWSBOAT_URL_FILE"
 }
 
 list() {
-    cat "$NEWSBOAT_URL_FILE"
+    cat "$NEWSBOAT_URL_FILE" || echo "No feeds found."
 }
 
 edit() {
-    $EDITOR "$NEWSBOAT_URL_FILE"
+    $EDITOR "$NEWSBOAT_URL_FILE" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
 }
 
 config() {
-    $EDITOR "$NEWSBOAT_CONFIG_FILE"
+    $EDITOR "$NEWSBOAT_CONFIG_FILE" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
 }
 
 if [[ -z "$1" ]]; then
