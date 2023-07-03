@@ -1,6 +1,9 @@
 #!/usr/bin/env sh
 
+name="feed"
 version="0.3.2"
+description="a command wrapper for newsboat"
+header=$(echo "$name - $description [version $version]\n\nUsage: $name <command>")
 
 if ! command -v newsboat &>/dev/null; then
     echo "Command \`newsboat\` not found, please install it first."
@@ -18,9 +21,7 @@ NEWSBOAT_CACHE_FILE=$(newsboat -h | grep -o -E 'cache:.*' | cut -d ':' -f 2 | se
 usage() {
     cat <<EOF
 
-feed - a minimal command wrapper for newsboat [version $version]
-
-Usage: feed <command> [options]
+$header
 
 Commands: [add, remove, list, edit, config, launch|start|run, help]
 EOF
@@ -29,9 +30,7 @@ EOF
 help() {
     cat <<EOF
 
-feed - a minimal command wrapper for newsboat [version $version]
-
-Usage: feed <command> [options]
+$header
 
 Commands:
     add <url>       Add a feed URL.
@@ -48,10 +47,10 @@ Any unrecognized commands or options will be passed to newsboat.
 Examples:
     
     Add a feed URL:
-        $ feed add https://example.com/feed.xml
+        $ $name add https://example.com/feed.xml
 
     Remove a feed URL:
-        $ feed remove https://example.com/feed.xml
+        $ $name remove https://example.com/feed.xml
 EOF
 }
 
@@ -78,7 +77,7 @@ remove() {
         exit 1
     fi
     if [[ ! $(grep "$1" "$NEWSBOAT_URL_FILE") ]]; then
-        echo "Feed $1 does not exist. Run \`feed list\` to see all feeds."
+        echo "Feed $1 does not exist. Run \`$name list\` to see all feeds."
         exit 1
     fi
     echo "Removing feed "$1"..."
