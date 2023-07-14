@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 name="feed"
-version="0.4.0"
+version="0.4.1"
 source_url="https://raw.githubusercontent.com/uncenter/feed-newsboat/main/feed.sh"
 description="newsboat's missing cli"
 header=$(echo "$name - $description [version $version]\n\nUsage: $name <command>")
