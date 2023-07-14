@@ -2,8 +2,10 @@
 
 name="feed"
 version="0.4.0"
+source_url="https://raw.githubusercontent.com/uncenter/feed-newsboat/main/feed.sh"
 description="newsboat's missing cli"
 header=$(echo "$name - $description [version $version]\n\nUsage: $name <command>")
+feed_location="$(which feed)"
 
 if ! command -v newsboat &>/dev/null; then
     echo "Command \`newsboat\` not found, please install it first."
@@ -80,6 +82,39 @@ remove() {
     sd "\n$1|${1}\n" "" "$NEWSBOAT_URL_FILE"
 }
 
+update() {
+    echo "Fetching latest version of feed..."
+    feed_download="feed-latest-$(date +%s%N).sh"
+    curl -fsSL "$source_url" -o "$feed_download"
+    chmod +x "$feed_download"
+    latest_version="$(./$feed_download help | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+")"
+    if [ "$version" == "$latest_version" ]; then
+        echo "Already up to date."
+        rm "$feed_download"
+        return 0
+    else
+        echo "Updating to latest version... ($version -> $latest_version)"
+    fi
+    mv "$feed_download" "$feed_location"
+}
+
+uninstall() {
+    if [ -f "$feed_location" ]; then
+        read -r -n 1 -p "Located feed in $(dirname $feed_location). Uninstall? [y/N] " REPLY
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            rm "$feed_location"
+            echo "Removed feed."
+            return 0
+        else
+            echo "Removal cancelled."
+            return 0
+        fi
+    fi
+    echo "Failed to locate feed in $(dirname $feed_location)."
+    return 1
+}
+
 if [[ -z "$1" ]]; then
     usage
     exit 1
@@ -109,8 +144,12 @@ case "$1" in
         command newsboat "$@"
         exit $?
         ;;
-    update|upgrade|uninstall)
-        bash -c "$(curl -fsSL https://github.com/uncenter/feed-newsboat/raw/main/install.sh)" "$1"
+    update|upgrade)
+        update
+        exit $?
+        ;;
+    uninstall)
+        uninstall
         exit $?
         ;;
     *)

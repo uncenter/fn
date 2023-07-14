@@ -24,9 +24,6 @@ feed <command> [options]
 
 Any unrecognized commands or options will be passed to newsboat. For example, `feed -h` will show the newsboat help message, **not** the feed help message.
 
-> **Note:**
-> The `update`, `upgrade`, and `uninstall` commands actually just run the [install script](install.sh) with the appropriate arguments.
-
 ## Installation
 
 ```sh
