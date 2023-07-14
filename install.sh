@@ -66,6 +66,21 @@ update() {
     fi
 }
 
+if [ -z "$1" ]; then
+    read -r -n 1 -p "Do you want to [i]nstall feed, [u]pdate feed, [r]emove feed, or [e]xit? " REPLY
+    echo
+    if [[ $REPLY =~ ^[Ii]$ ]]; then
+        install
+    elif [[ $REPLY =~ ^[Uu]$ ]]; then
+        update
+    elif [[ $REPLY =~ ^[Rr]$ ]]; then
+        remove
+    else
+        echo "Installation cancelled."
+        exit 0
+    fi
+fi
+
 case "$1" in
     update|upgrade)
         update
@@ -80,22 +95,7 @@ case "$1" in
         exit $?
         ;;
     *)
-        if [[ -z "$1" ]]; then
-            echo "Usage: $0 [install|update|remove]"
-            exit 1
-        fi
+        echo "Usage: [install|update|remove]"
+        exit 1
         ;;
 esac
-
-read -r -n 1 -p "Do you want to [i]nstall feed, [u]pdate feed, [r]emove feed, or [e]xit? " REPLY
-echo
-if [[ $REPLY =~ ^[Ii]$ ]]; then
-    install
-elif [[ $REPLY =~ ^[Uu]$ ]]; then
-    update
-elif [[ $REPLY =~ ^[Rr]$ ]]; then
-    remove
-else
-    echo "Installation cancelled."
-    exit 0
-fi
