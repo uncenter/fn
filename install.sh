@@ -75,10 +75,8 @@ if [ -z "$1" ]; then
         update
     elif [[ $REPLY =~ ^[Rr]$ ]]; then
         remove
-    else
-        echo "Installation cancelled."
-        exit 0
     fi
+    exit 0
 fi
 
 case "$1" in
