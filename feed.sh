@@ -1,10 +1,10 @@
 #!/usr/bin/env sh
 
 name="feed"
-version="0.4.3"
+version="0.4.4"
 source_url="https://raw.githubusercontent.com/uncenter/feed-newsboat/main/feed.sh"
 description="newsboat's missing cli"
-header=$(echo "$name - $description [version $version]\n\nUsage: $name <command>")
+header=$(echo "$name - $description [v$version]\n\nUsage: $name <command>")
 feed_location="$(which feed)"
 
 if ! command -v newsboat &>/dev/null; then
@@ -113,6 +113,10 @@ uninstall() {
 }
 
 if [[ -z "$1" ]]; then
+    if [[ ! -z "$FEED_NO_ARGS_LAUNCH" && "$FEED_NO_ARGS_LAUNCH" != "0" ]]; then
+        command newsboat
+        exit $?
+    fi
     usage
     exit 1
 fi
