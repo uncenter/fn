@@ -10,11 +10,11 @@ if [ -f "$install_dir/feed" ]; then
     exit 1
 fi
 echo "Fetching latest version of feed..."
-feed_download="feed-latest-$(date +%s%N).sh"
-curl -fsSL "$script_url" -o "$feed_download"
-chmod +x "$feed_download"
+download="feed-latest-$(date +%s%N).sh"
+curl -fsSL "$script_url" -o "$download"
+chmod +x "$download"
 mkdir -p "$install_dir"
-mv "$feed_download" "$install_dir/feed"
+mv "$download" "$install_dir/feed"
 if [[ ! ":$PATH:" == *":$install_dir:"* ]]; then
     echo "WARNING: $install_dir is not in your PATH. You will need to add it manually to use feed.\n\texport PATH=\"\$PATH:$install_dir\""
 fi
