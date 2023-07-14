@@ -16,11 +16,16 @@ feed <command> [options]
 | `remove <url>`           | Remove a feed URL.             |
 | `list`                   | List all feed URLs.            |
 | `edit`                   | Edit the feed URL file.        |
-| `config`                 | Edit the newsboat config file. |
+| `config[ure]`            | Edit the newsboat config file. |
 | `launch`, `start`, `run` | Launch newsboat.               |
+| `update`, `upgrade`      | Update feed.                   |
+| `uninstall`              | Uninstall feed.                |
 | `help`                   | Show help message.             |
 
-Any unrecognized commands or options will be passed to newsboat.
+Any unrecognized commands or options will be passed to newsboat. For example, `feed -h` will show the newsboat help message, **not** the feed help message.
+
+> **Note:**
+> The `update`, `upgrade`, and `uninstall` commands actually just run the [install script](install.sh) with the appropriate arguments.
 
 ## Installation
 

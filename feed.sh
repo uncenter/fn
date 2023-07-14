@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 name="feed"
-version="0.3.2"
+version="0.4.0"
 description="newsboat's missing cli"
 header=$(echo "$name - $description [version $version]\n\nUsage: $name <command>")
 
@@ -23,7 +23,7 @@ usage() {
 
 $header
 
-Commands: [add, remove, list, edit, config, launch|start|run, help]
+Commands: [add, remove, list, edit, config[ure], launch/start/run, update/upgrade, uninstall, help]
 EOF
 }
 
@@ -37,13 +37,16 @@ Commands:
     remove <url>    Remove a feed URL.
     list            List all feed URLs.
     edit            Edit the feed URL file.
-    config          Edit the newsboat config file.
-    launch, start, run
+    config[ure]     Edit the newsboat config file.
+    launch/start/run
                     Launch newsboat.
+    update/upgrade  Update feed.
+    uninstall       Uninstall feed.
     help            Show this help message.
 
 Any unrecognized commands or options will be passed to newsboat.
-Open an issue or uninstall at https://github.com/uncenter/feed-newsboat.
+
+https://github.com/uncenter/feed-newsboat
 EOF
 }
 
@@ -77,18 +80,6 @@ remove() {
     sd "\n$1|${1}\n" "" "$NEWSBOAT_URL_FILE"
 }
 
-list() {
-    cat "$NEWSBOAT_URL_FILE" || echo "No feeds found."
-}
-
-edit() {
-    $EDITOR "$NEWSBOAT_URL_FILE" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
-}
-
-config() {
-    $EDITOR "$NEWSBOAT_CONFIG_FILE" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
-}
-
 if [[ -z "$1" ]]; then
     usage
     exit 1
@@ -102,13 +93,13 @@ case "$1" in
         remove "$2"
         ;;
     list)
-        list
+        cat "$NEWSBOAT_URL_FILE" || echo "No feeds found."
         ;;
     edit)
-        edit
+        $EDITOR "$NEWSBOAT_URL_FILE" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
         ;;
-    config)
-        config
+    config|configure)
+        $EDITOR "$NEWSBOAT_CONFIG_FILE" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
         ;;
     help)
         help
@@ -116,6 +107,10 @@ case "$1" in
     launch|start|run)
         shift
         command newsboat "$@"
+        exit $?
+        ;;
+    update|upgrade|uninstall)
+        bash -c "$(curl -fsSL https://github.com/uncenter/feed-newsboat/raw/main/install.sh)" "$1"
         exit $?
         ;;
     *)
