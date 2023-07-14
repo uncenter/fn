@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 name="feed"
-version="0.4.1"
+version="0.4.2"
 source_url="https://raw.githubusercontent.com/uncenter/feed-newsboat/main/feed.sh"
 description="newsboat's missing cli"
 header=$(echo "$name - $description [version $version]\n\nUsage: $name <command>")
@@ -91,11 +91,10 @@ update() {
     if [ "$version" == "$latest_version" ]; then
         echo "Already up to date."
         rm "$feed_download"
-        return 0
     else
-        echo "Updating to latest version... ($version -> $latest_version)"
+        mv "$feed_download" "$feed_location"
+        echo "Updated to latest version ($version -> $latest_version)."
     fi
-    mv "$feed_download" "$feed_location"
 }
 
 uninstall() {
