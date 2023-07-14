@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 name="feed"
-version="0.4.2"
+version="0.4.3"
 source_url="https://raw.githubusercontent.com/uncenter/feed-newsboat/main/feed.sh"
 description="newsboat's missing cli"
 header=$(echo "$name - $description [version $version]\n\nUsage: $name <command>")
@@ -62,11 +62,10 @@ add() {
         exit 1
     fi
     if [[ $(grep "$1" "$NEWSBOAT_URL_FILE") ]]; then
-        echo "Feed $1 already exists."
+        echo "Feed '$1' already exists."
         exit 1
     fi
-    echo "Adding feed "$1"..."
-    echo "$1" >> "$NEWSBOAT_URL_FILE"
+    echo "$1" >> "$NEWSBOAT_URL_FILE" && echo "Added feed '$1'."
 }
 
 remove() {
@@ -75,11 +74,10 @@ remove() {
         exit 1
     fi
     if [[ ! $(grep "$1" "$NEWSBOAT_URL_FILE") ]]; then
-        echo "Feed $1 does not exist. Run \`$name list\` to see all feeds."
+        echo "Feed '$1' does not exist! Run \`$name list\` to see all feeds."
         exit 1
     fi
-    echo "Removing feed "$1"..."
-    sd "\n$1|${1}\n" "" "$NEWSBOAT_URL_FILE"
+    sd "\n$1|${1}\n" "" "$NEWSBOAT_URL_FILE" && echo "Removed feed '$1'."
 }
 
 update() {
