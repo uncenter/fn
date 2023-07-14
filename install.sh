@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -eo pipefail
 
 install_dir="${XDG_BIN_HOME:-$HOME/.local/bin}"
 script_url="https://raw.githubusercontent.com/uncenter/feed-newsboat/main/feed.sh"
