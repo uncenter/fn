@@ -36,6 +36,10 @@ You may need to manually add either `$XDG_BIN_HOME` or `$HOME/.local/bin`, depen
 export PATH="$PATH:$HOME/.local/bin"
 ```
 
+## Environment variables
+
+`FEED_NO_ARGS_LAUNCH` - If set, feed will launch newsboat when no arguments are provided. By default, feed will show a brief help message.
+
 ## License
 
 [MIT](LICENSE)
