@@ -80,8 +80,10 @@ case "$1" in
         exit $?
         ;;
     *)
-        echo "Usage: $0 [install|update|remove]"
-        exit 1
+        if [[ -z "$1" ]]; then
+            echo "Usage: $0 [install|update|remove]"
+            exit 1
+        fi
         ;;
 esac
 
