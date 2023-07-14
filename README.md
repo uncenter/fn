@@ -7,7 +7,7 @@ See [Installation](#installation) to get started, update, or uninstall.
 ## Usage
 
 ```sh
-feed <command> [options]
+feed <command> [arguments]
 ```
 
 | Command                  | Description                    |
@@ -27,10 +27,10 @@ Any unrecognized commands or options will be passed to newsboat. For example, `f
 ## Installation
 
 ```sh
-bash -c "$(curl -fsSL https://github.com/uncenter/feed-newsboat/raw/main/install.sh)"
+curl -fsSL https://github.com/uncenter/feed-newsboat/raw/main/install.sh | sh
 ```
 
-If `$HOME/.local/bin` (or `$HOME/bin`, depending on where feed was installed) is not in your `$PATH`, you will need to add it manually to use `feed`.
+You may need to manually add either `$XDG_BIN_HOME` or `$HOME/.local/bin`, depending on the installation location, to your `$PATH` if it is not already present.
 
 ```sh
 export PATH="$PATH:$HOME/.local/bin"
