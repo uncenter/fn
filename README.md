@@ -1,6 +1,6 @@
-# `feed` - newsboat's missing cli
+# Feed - Newsboat's missing CLI
 
-Feed is a simple wrapper around [newsboat](https://newsboat.org/) to make it easier to launch, configure, and manage your feeds.
+Feed is a simple wrapper around [Newsboat](https://newsboat.org/) to make it easier to launch, configure, and manage your feeds.
 
 See [Installation](#installation) to get started, update, or uninstall.
 
@@ -12,17 +12,17 @@ feed <command> [arguments]
 
 | Command                  | Description                    |
 | ------------------------ | ------------------------------ |
-| `add <url>`              | Add a feed URL.                |
-| `remove <url>`           | Remove a feed URL.             |
-| `list`                   | List all feed URLs.            |
-| `edit`                   | Edit the feed URL file.        |
-| `config[ure]`            | Edit the newsboat config file. |
-| `launch`, `start`, `run` | Launch newsboat.               |
+| `add <url>`              | Add a URL.                |
+| `remove <url>`           | Remove a URL.             |
+| `list`                   | List all URLs.            |
+| `edit`                   | Edit the URL file.        |
+| `configure`              | Edit the Newsboat config file. |
+| `launch`, `start`, `run` | Launch Newsboat.               |
 | `update`, `upgrade`      | Update feed.                   |
 | `uninstall`              | Uninstall feed.                |
 | `help`                   | Show help message.             |
 
-Any unrecognized commands or options will be passed to newsboat. For example, `feed -h` will show the newsboat help message, **not** the feed help message.
+Any unrecognized commands or options will be passed to Newsboat. For example, `feed -h` will show the Newsboat help message, **not** the help message for Feed.
 
 ## Installation
 
@@ -38,7 +38,7 @@ export PATH="$PATH:$HOME/.local/bin"
 
 ## Environment variables
 
-`FEED_NO_ARGS_LAUNCH` - If set, feed will launch newsboat when no arguments are provided. By default, feed will show a brief help message.
+`FEED_NO_ARGS_LAUNCH` - If set, feed will launch Newsboat when no arguments are provided. By default, feed will show a brief help message.
 
 ## License
 

@@ -1,11 +1,10 @@
 #!/usr/bin/env sh
 
 name="feed"
-version="0.4.4"
-source_url="https://raw.githubusercontent.com/uncenter/feed-newsboat/main/feed.sh"
-description="newsboat's missing cli"
-header=$(echo "$name - $description [v$version]\n\nUsage: $name <command>")
-feed_location="$(which feed)"
+version="0.4.5"
+source="https://raw.githubusercontent.com/uncenter/feed-newsboat/main/feed.sh"
+header=$(echo "$name - Newsboat's missing CLI [v$version]\n\nUsage: $name <command>")
+script_path="$(which $0)"
 
 if ! command -v newsboat &>/dev/null; then
     echo "Command \`newsboat\` not found, please install it first."
@@ -16,16 +15,15 @@ if ! command -v newsboat &>/dev/null; then
     exit 1
 fi
 
-NEWSBOAT_URL_FILE=$(newsboat -h | grep -o -E 'feed URLs:.*' | cut -d ':' -f 2 | sed 's/ //g')
-NEWSBOAT_CONFIG_FILE=$(newsboat -h | grep -o -E 'configuration:.*' | cut -d ':' -f 2 | sed 's/ //g')
-NEWSBOAT_CACHE_FILE=$(newsboat -h | grep -o -E 'cache:.*' | cut -d ':' -f 2 | sed 's/ //g')
+url_file=$(newsboat -h | grep -o -E "feed URLs:.*" | cut -d ':' -f 2 | sed 's/ //g')
+config_file=$(newsboat -h | grep -o -E "configuration:.*" | cut -d ':' -f 2 | sed 's/ //g')
 
 usage() {
     cat <<EOF
 
 $header
 
-Commands: [add, remove, list, edit, config[ure], launch/start/run, update/upgrade, uninstall, help]
+Commands: [add, remove, list, edit, configure, launch/start/run, update/upgrade, uninstall, help]
 EOF
 }
 
@@ -35,18 +33,18 @@ help() {
 $header
 
 Commands:
-    add <url>       Add a feed URL.
-    remove <url>    Remove a feed URL.
-    list            List all feed URLs.
-    edit            Edit the feed URL file.
-    config[ure]     Edit the newsboat config file.
+    add <url>       Add a URL.
+    remove <url>    Remove a URL.
+    list            List all URLs.
+    edit            Edit the URL file.
+    configure       Edit the Newsboat config file.
     launch/start/run
-                    Launch newsboat.
+                    Launch Newsboat.
     update/upgrade  Update feed.
     uninstall       Uninstall feed.
     help            Show this help message.
 
-Any unrecognized commands or options will be passed to newsboat.
+Any unrecognized commands or options will be passed to Newsboat.
 
 https://github.com/uncenter/feed-newsboat
 EOF
@@ -61,11 +59,11 @@ add() {
         echo "Please specify a valid feed URL (must start with http:// or https://)."
         exit 1
     fi
-    if [[ $(grep "$1" "$NEWSBOAT_URL_FILE") ]]; then
+    if [[ $(grep "$1" "$url_file") ]]; then
         echo "Feed '$1' already exists."
         exit 1
     fi
-    echo "$1" >> "$NEWSBOAT_URL_FILE" && echo "Added feed '$1'."
+    echo "$1" >> "$url_file" && echo "Added feed '$1'."
 }
 
 remove() {
@@ -73,34 +71,34 @@ remove() {
         echo "Please specify a feed to remove."
         exit 1
     fi
-    if [[ ! $(grep "$1" "$NEWSBOAT_URL_FILE") ]]; then
+    if [[ ! $(grep "$1" "$url_file") ]]; then
         echo "Feed '$1' does not exist! Run \`$name list\` to see all feeds."
         exit 1
     fi
-    sd "\n$1|${1}\n" "" "$NEWSBOAT_URL_FILE" && echo "Removed feed '$1'."
+    sd "\n$1|${1}\n" "" "$url_file" && echo "Removed feed '$1'."
 }
 
 update() {
     echo "Fetching latest version of feed..."
-    feed_download="feed-latest-$(date +%s%N).sh"
-    curl -fsSL "$source_url" -o "$feed_download"
-    chmod +x "$feed_download"
-    latest_version="$(./$feed_download help | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+")"
-    if [ "$version" == "$latest_version" ]; then
+    download="feed-latest-$(date +%s%N).sh"
+    curl -fsSL "$source" -o "$download"
+    chmod +x "$download"
+    latest_version="$(./$download help | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+")"
+    if [ "$version" == "$latest_version" ] && [ $(cmp --silent $download $script_path) ]; then
         echo "Already up to date."
-        rm "$feed_download"
+        rm "$download"
     else
-        mv "$feed_download" "$feed_location"
+        mv "$download" "$script_path"
         echo "Updated to latest version ($version -> $latest_version)."
     fi
 }
 
 uninstall() {
-    if [ -f "$feed_location" ]; then
-        read -r -n 1 -p "Located feed in $(dirname $feed_location). Uninstall? [y/N] " REPLY
+    if [ -f "$script_path" ]; then
+        read -r -n 1 -p "Located feed in $(dirname $script_path). Uninstall? [y/N] " REPLY
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-            rm "$feed_location"
+            rm "$script_path"
             echo "Removed feed."
             return 0
         else
@@ -108,7 +106,7 @@ uninstall() {
             return 0
         fi
     fi
-    echo "Failed to locate feed in $(dirname $feed_location)."
+    echo "Failed to locate feed in $(dirname $script_path)."
     return 1
 }
 
@@ -129,13 +127,13 @@ case "$1" in
         remove "$2"
         ;;
     list)
-        cat "$NEWSBOAT_URL_FILE" || echo "No feeds found."
+        cat "$url_file" || echo "No feeds found."
         ;;
     edit)
-        $EDITOR "$NEWSBOAT_URL_FILE" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
+        $EDITOR "$url_file" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
         ;;
-    config|configure)
-        $EDITOR "$NEWSBOAT_CONFIG_FILE" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
+    configure)
+        $EDITOR "$config_file" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
         ;;
     help)
         help
