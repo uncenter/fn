@@ -1,9 +1,8 @@
 #!/usr/bin/env sh
 
-name="feed"
-version="0.4.7"
-source="https://raw.githubusercontent.com/uncenter/feed-newsboat/main/feed.sh"
-header=$(echo "$name - Newsboat's missing CLI [v$version]\n\nUsage: $name <command>")
+name="fn"
+version="1.0.0"
+source="https://raw.githubusercontent.com/uncenter/fn/main/fn.sh"
 script_path="$(which $0)"
 
 if ! command -v newsboat &>/dev/null; then
@@ -15,22 +14,28 @@ if ! command -v newsboat &>/dev/null; then
     exit 1
 fi
 
-url_file=$(newsboat -h | grep -o -E "feed URLs:.*" | cut -d ':' -f 2 | sed 's/ //g')
-config_file=$(newsboat -h | grep -o -E "configuration:.*" | cut -d ':' -f 2 | sed 's/ //g')
+urls=$(newsboat -h | grep -o -E "feed URLs:.*" | cut -d ':' -f 2 | sed 's/ //g')
+configuration=$(newsboat -h | grep -o -E "configuration:.*" | cut -d ':' -f 2 | sed 's/ //g')
+
+# Fix newlines for listing, adding, removing without issues.
+# If the last character is not a newline character...
+if [[ ! $(tail -c1 "$urls" | wc -l) -gt 0 ]]; then
+    # And the file is not empty...
+    if [ -s "$urls" ]; then
+        # Then add a newline.
+        echo "" >> $urls
+    fi
+fi
 
 usage() {
-    cat <<EOF
-
-$header
-
-Commands: [add, remove, list, edit, configure, launch/start/run, update/upgrade, uninstall, help]
-EOF
+    echo "usage: [add, remove, list, edit, configure, launch/start/run, update/upgrade, uninstall, help]"
 }
 
 help() {
     cat <<EOF
+$name - manage Newsboat with ease [v$version]
 
-$header
+Usage: $0 [command]
 
 Commands:
     add <url>       Add a URL.
@@ -40,47 +45,47 @@ Commands:
     configure       Edit the Newsboat config file.
     launch/start/run
                     Launch Newsboat.
-    update/upgrade  Update feed.
-    uninstall       Uninstall feed.
+    update/upgrade  Update.
+    uninstall       Uninstall.
     help            Show this help message.
 
 Any unrecognized commands or options will be passed to Newsboat.
 
-https://github.com/uncenter/feed-newsboat
+https://github.com/uncenter/fn
 EOF
 }
 
 add() {
     if [ -z "$1" ]; then
-        echo "Please specify a feed to add."
+        echo "$0: command add: requires url argument"
         exit 1
     fi
     if [[ $1 != http://* && $1 != https://* ]]; then
-        echo "Please specify a valid feed URL (must start with http:// or https://)."
+        echo "$0: command add: url argument must start with http:// or https://"
         exit 1
     fi
-    if [[ $(grep "$1" "$url_file") ]]; then
-        echo "Feed '$1' already exists."
+    if [[ $(grep "^$1$" "$urls") ]]; then
+        echo "'$1' already present in URLs."
         exit 1
     fi
-    echo "$1" >> "$url_file" && echo "Added feed '$1'."
+    echo "$1" >> "$urls" && echo "Added '$1'."
 }
 
 remove() {
     if [ -z "$1" ]; then
-        echo "Please specify a feed to remove."
+        echo "$0: command remove: requires url arugment"
         exit 1
     fi
-    if [[ ! $(grep "$1" "$url_file") ]]; then
-        echo "Feed '$1' does not exist! Run \`$name list\` to see all feeds."
+    if [[ ! $(grep "^$1$" "$urls") ]]; then
+        echo "$0: command remove: '$1' cannot be removed (not in URLs)\nRun \`$0 list\` to list existing URLs."
         exit 1
     fi
-    sd "\n$1|${1}\n" "" "$url_file" && echo "Removed feed '$1'."
+    sd "^$1$\n" "" "$urls" && echo "Removed '$1'."
 }
 
 update() {
-    echo "Fetching latest version of feed..."
-    download="feed-latest-$(date +%s%N).sh"
+    echo "Fetching latest version..."
+    download="$name-dl-latest-$(date +%s%N).sh"
     curl -fsSL -H "Cache-Control: no-cache" "$source?$(date +%s%N)" -o "$download"
     chmod +x "$download"
     latest_version="$(./$download help | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+")"
@@ -95,23 +100,22 @@ update() {
 
 uninstall() {
     if [ -f "$script_path" ]; then
-        read -r -n 1 -p "Located feed in $(dirname $script_path). Uninstall? [y/N] " REPLY
+        read -r -n 1 -p "Located \`$name\` in $(dirname $script_path). Uninstall? (y/N) " REPLY
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-            rm "$script_path"
-            echo "Removed feed."
-            return 0
+            rm "$script_path" && echo "Success."
+            return $?
         else
-            echo "Removal cancelled."
+            echo "Aborted."
             return 0
         fi
     fi
-    echo "Failed to locate feed in $(dirname $script_path)."
+    echo "$0: command uninstall: something went wrong"
     return 1
 }
 
 if [[ -z "$1" ]]; then
-    if [[ ! -z "$FEED_NO_ARGS_LAUNCH" && "$FEED_NO_ARGS_LAUNCH" != "0" ]]; then
+    if [[ ! -z "$FN_NO_ARGS_LAUNCH" && "$FN_NO_ARGS_LAUNCH" != "0" ]]; then
         command newsboat
         exit $?
     fi
@@ -127,13 +131,18 @@ case "$1" in
         remove "$2"
         ;;
     list)
-        cat "$url_file" || echo "No feeds found."
+        if [ -s "$urls" ]; then
+            cat "$urls"
+            exit $?
+        fi
+        echo "$0: command list: no URLs found"
+        exit 1
         ;;
     edit)
-        $EDITOR "$url_file" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
+        $EDITOR "$urls"
         ;;
     configure)
-        $EDITOR "$config_file" || echo "No editor found. Set the EDITOR environment variable to your preferred editor."
+        $EDITOR "$configuration"
         ;;
     help)
         help
