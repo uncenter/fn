@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 name="feed"
-version="0.4.5"
+version="0.4.6"
 source="https://raw.githubusercontent.com/uncenter/feed-newsboat/main/feed.sh"
 header=$(echo "$name - Newsboat's missing CLI [v$version]\n\nUsage: $name <command>")
 script_path="$(which $0)"
@@ -84,7 +84,7 @@ update() {
     curl -fsSL "$source" -o "$download"
     chmod +x "$download"
     latest_version="$(./$download help | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+")"
-    if [ "$version" == "$latest_version" ] && [ $(cmp --silent $download $script_path) ]; then
+    if [ "$version" = "$latest_version" ] && cmp --silent $download $script_path; then
         echo "Already up to date."
         rm "$download"
     else
