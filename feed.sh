@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 name="feed"
-version="0.4.6"
+version="0.4.7"
 source="https://raw.githubusercontent.com/uncenter/feed-newsboat/main/feed.sh"
 header=$(echo "$name - Newsboat's missing CLI [v$version]\n\nUsage: $name <command>")
 script_path="$(which $0)"
@@ -81,7 +81,7 @@ remove() {
 update() {
     echo "Fetching latest version of feed..."
     download="feed-latest-$(date +%s%N).sh"
-    curl -fsSL "$source" -o "$download"
+    curl -fsSL -H "Cache-Control: no-cache" "$source?$(date +%s%N)" -o "$download"
     chmod +x "$download"
     latest_version="$(./$download help | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+")"
     if [ "$version" = "$latest_version" ] && cmp --silent $download $script_path; then
