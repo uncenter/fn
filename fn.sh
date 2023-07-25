@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 name="fn"
-version="1.0.0"
+version="1.0.1"
 source="https://raw.githubusercontent.com/uncenter/fn/main/fn.sh"
 script_path="$(which $0)"
 
@@ -33,9 +33,9 @@ usage() {
 
 help() {
     cat <<EOF
-$name - manage Newsboat with ease [v$version]
+$name - launch, configure, and manage your feeds for Newsboat [v$version]
 
-Usage: $0 [command]
+Usage: $name [command]
 
 Commands:
     add <url>       Add a URL.
@@ -57,11 +57,11 @@ EOF
 
 add() {
     if [ -z "$1" ]; then
-        echo "$0: command add: requires url argument"
+        echo "$name: command add: requires url argument"
         exit 1
     fi
     if [[ $1 != http://* && $1 != https://* ]]; then
-        echo "$0: command add: url argument must start with http:// or https://"
+        echo "$name: command add: url argument must start with http:// or https://"
         exit 1
     fi
     if [[ $(grep "^$1$" "$urls") ]]; then
@@ -73,11 +73,12 @@ add() {
 
 remove() {
     if [ -z "$1" ]; then
-        echo "$0: command remove: requires url arugment"
+        echo "$name: command remove: requires url arugment"
         exit 1
     fi
     if [[ ! $(grep "^$1$" "$urls") ]]; then
-        echo "$0: command remove: '$1' cannot be removed (not in URLs)\nRun \`$0 list\` to list existing URLs."
+        echo "$name: command remove: '$1' does not exist in URLs"
+        echo "Run \`$name list\` to list existing URLs."
         exit 1
     fi
     sd "^$1$\n" "" "$urls" && echo "Removed '$1'."
@@ -110,7 +111,7 @@ uninstall() {
             return 0
         fi
     fi
-    echo "$0: command uninstall: something went wrong"
+    echo "$name: command uninstall: something went wrong"
     return 1
 }
 
@@ -135,7 +136,7 @@ case "$1" in
             cat "$urls"
             exit $?
         fi
-        echo "$0: command list: no URLs found"
+        echo "$name: command list: no URLs found"
         exit 1
         ;;
     edit)
