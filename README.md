@@ -1,4 +1,4 @@
-# `fn` - Newsboat's missing CLI
+# `fn`
 
 `fn` is a simple wrapper around [Newsboat](https://newsboat.org/) to make it easier to launch, configure, and manage your feeds.
 
