@@ -1,16 +1,12 @@
 #!/usr/bin/env sh
 
 name="fn"
-version="1.0.1"
+version="1.1.0"
 source="https://raw.githubusercontent.com/uncenter/fn/main/fn.sh"
 script_path="$(which $0)"
 
 if ! command -v newsboat &>/dev/null; then
-    echo "Command \`newsboat\` not found, please install it first."
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        echo "You can install it with \`brew install newsboat\`."
-    fi
-    echo "See https://newsboat.org/ for more information."
+    echo "$name: command \`newsboat\` not found; please install it first (see https://newsboat.org/)"
     exit 1
 fi
 
@@ -60,15 +56,17 @@ add() {
         echo "$name: command add: requires url argument"
         exit 1
     fi
-    if [[ $1 != http://* && $1 != https://* ]]; then
-        echo "$name: command add: url argument must start with http:// or https://"
-        exit 1
-    fi
-    if [[ $(grep "^$1$" "$urls") ]]; then
-        echo "'$1' already present in URLs."
-        exit 1
-    fi
-    echo "$1" >> "$urls" && echo "Added '$1'."
+    for url in "$@"; do
+        if [[ $url != http://* && $url != https://* ]]; then
+            echo "$name: command add: url argument must start with http:// or https://"
+            continue
+        fi
+        if [[ $(grep "^$url$" "$urls") ]]; then
+            echo "$name: command add: '$url' already exists in URLs"
+            continue
+        fi
+        echo "$url" >> "$urls" && echo "Added '$url'."
+    done
 }
 
 remove() {
@@ -76,12 +74,13 @@ remove() {
         echo "$name: command remove: requires url arugment"
         exit 1
     fi
-    if [[ ! $(grep "^$1$" "$urls") ]]; then
-        echo "$name: command remove: '$1' does not exist in URLs"
-        echo "Run \`$name list\` to list existing URLs."
-        exit 1
-    fi
-    sd "^$1$\n" "" "$urls" && echo "Removed '$1'."
+    for url in "$@"; do
+        if [[ ! $(grep "^$url$" "$urls") ]]; then
+            echo "$name: command remove: '$url' does not exist in URLs"
+            continue
+        fi
+        sd "^$url$\n" "" "$urls" && echo "Removed '$url'."
+    done
 }
 
 update() {
@@ -126,10 +125,12 @@ fi
 
 case "$1" in
     add)
-        add "$2"
+        shift
+        add $@
         ;;
     remove)
-        remove "$2"
+        shift
+        remove $@
         ;;
     list)
         if [ -s "$urls" ]; then
@@ -150,7 +151,7 @@ case "$1" in
         ;;
     launch|start|run)
         shift
-        command newsboat "$@"
+        command newsboat $@
         exit $?
         ;;
     update|upgrade)
