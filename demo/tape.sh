@@ -5,17 +5,19 @@ get_file() {
 }
 
 urls=$(get_file "feed URLs")
-configuration=$(get_file "configuration")
+config=$(get_file "configuration")
 cache=$(get_file "cache")
 
 mv $urls ./urls.bak
-mv $configuration ./config.bak
+mv $config ./config.bak
 mv $cache ./cache.bak
 
 mv ./urls.txt $urls
+mv ./config.cfg $config
 vhs ./demo.tape
 mv $urls ./urls.txt
+mv $config ./config.cfg
 
 mv ./urls.bak $urls
-mv ./config.bak $configuration
+mv ./config.bak $config
 mv ./cache.bak $cache

@@ -8,7 +8,7 @@ Set Framerate 30
 Set TypingSpeed 0.08
 Set Width 2450
 Set Height 1200
-Set Theme "Catppuccin Macchiato"
+Set Theme {"name":"GitHub Dark","black":"#000000","red":"#f78166","green":"#56d364","yellow":"#e3b341","blue":"#6ca4f8","purple":"#db61a2","cyan":"#2b7489","white":"#ffffff","brightBlack":"#4d4d4d","brightRed":"#f78166","brightGreen":"#56d364","brightYellow":"#e3b341","brightBlue":"#6ca4f8","brightPurple":"#db61a2","brightCyan":"#2b7489","brightWhite":"#ffffff","background":"#101216","foreground":"#8b949e","selectionBackground":"#3b5070","cursorColor":"#c9d1d9"}
 Set CursorBlink false
 
 Hide
