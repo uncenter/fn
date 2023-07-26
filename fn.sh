@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
 name="fn"
-version="1.1.0"
-source="https://raw.githubusercontent.com/uncenter/fn/main/fn.sh"
+version="1.1.1"
+source="https://github.com/uncenter/fn/releases/latest/download/fn.sh"
 script_path="$(which $0)"
 
 if ! command -v newsboat &>/dev/null; then
@@ -85,13 +85,13 @@ remove() {
 
 update() {
     echo "Fetching latest version..."
-    download="$name-dl-latest-$(date +%s%N).sh"
+    download="$name-dl-$(date +%s%N).sh"
     curl -fsSL -H "Cache-Control: no-cache" "$source?$(date +%s%N)" -o "$download"
     chmod +x "$download"
     latest_version="$(./$download help | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+")"
-    if [ "$version" = "$latest_version" ] && cmp --silent $download $script_path; then
-        echo "Already up to date."
+    if cmp --silent $download $script_path; then
         rm "$download"
+        echo "Already up to date."
     else
         mv "$download" "$script_path"
         echo "Updated to latest version ($version -> $latest_version)."
