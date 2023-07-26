@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 name="fn"
-version="1.1.1"
+version="v1.2.0"
 source="https://github.com/uncenter/fn/releases/latest/download/fn.sh"
 script_path="$(which $0)"
 
@@ -29,7 +29,7 @@ usage() {
 
 help() {
     cat <<EOF
-$name - launch, configure, and manage your feeds for Newsboat [v$version]
+$name - launch, configure, and manage your feeds for Newsboat
 
 Usage: $name [command]
 
@@ -43,7 +43,10 @@ Commands:
                     Launch Newsboat.
     update/upgrade  Update.
     uninstall       Uninstall.
-    help            Show this help message.
+    help            Display this help message.
+
+Options:
+    -V, --version   Display current version.
 
 Any unrecognized commands or options will be passed to Newsboat.
 
@@ -88,7 +91,7 @@ update() {
     download="$name-dl-$(date +%s%N).sh"
     curl -fsSL -H "Cache-Control: no-cache" "$source?$(date +%s%N)" -o "$download"
     chmod +x "$download"
-    latest_version="$(./$download help | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+")"
+    latest_version="$(./$download --version || echo "unknown")"
     if cmp --silent $download $script_path; then
         rm "$download"
         echo "Already up to date."
@@ -146,8 +149,13 @@ case "$1" in
     configure)
         $EDITOR "$configuration"
         ;;
-    help)
+    help|-h|--help)
         help
+        exit 0
+        ;;
+    -V|--version)
+        echo "$version"
+        exit 0
         ;;
     launch|start|run)
         shift

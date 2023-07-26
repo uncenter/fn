@@ -1,6 +1,6 @@
 # `fn`
 
-![Demo of the features provided by `fn`](demo/demo.gif)
+![Recording of using `fn` in the terminal](demo/demo.gif)
 
 `fn` is a simple wrapper around [Newsboat](https://newsboat.org/) to make it easier to launch, configure, and manage your feeds.
 
@@ -22,9 +22,10 @@ fn [command]
 | `launch`, `start`, `run` | Launch Newsboat.               |
 | `update`, `upgrade`      | Update `fn`.                   |
 | `uninstall`              | Uninstall `fn`.                |
-| `help`                   | Show help message.             |
+| `help`, `-h`, `--help`   | Display help message.          |
+| `-V`, `--version`        | Display current version.       |
 
-Any unrecognized commands or options will be passed to Newsboat. For example, `fn -h` will show the Newsboat help message, **not** the help message for `fn`.
+Any unrecognized commands or options will be passed to Newsboat. ~~For example, `fn -h` will show the Newsboat help message, **not** the help message for `fn`.~~ As of `v1.2.0`, the following options will be used by `fn`: `-h`, `--help`, `--version`, `-V`. If you want help with Newsboat, run `newsboat -h` directly (or `fn run -h`).
 
 ## Installation
 
