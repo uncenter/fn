@@ -1,5 +1,7 @@
 # `fn`
 
+![Demo of the features provided by `fn`](demo/demo.gif)
+
 `fn` is a simple wrapper around [Newsboat](https://newsboat.org/) to make it easier to launch, configure, and manage your feeds.
 
 See [Installation](#installation) to get started, update, or uninstall.
