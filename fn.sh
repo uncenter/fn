@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 name="fn"
-version="v1.2.0"
+version="v1.2.1"
 source="https://github.com/uncenter/fn/releases/latest/download/fn.sh"
 script_path="$(which $0)"
 
@@ -89,7 +89,7 @@ remove() {
 update() {
     echo "Fetching latest version..."
     download="$name-dl-$(date +%s%N).sh"
-    curl -fsSL -H "Cache-Control: no-cache" "$source?$(date +%s%N)" -o "$download"
+    curl -fsSL "$source" -o "$download"
     chmod +x "$download"
     latest_version="$(./$download --version || echo "unknown")"
     if cmp --silent $download $script_path; then
