@@ -1,6 +1,6 @@
 # `fn`
 
-![Recording of using `fn` in the terminal](demo/demo.gif)
+![Recording of using `fn` in the terminal](docs/demo.gif)
 
 `fn` is a simple wrapper around [Newsboat](https://newsboat.org/) to make it easier to launch, configure, and manage your feeds.
 

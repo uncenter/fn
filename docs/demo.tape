@@ -36,7 +36,14 @@ Sleep 2s
 
 Type 'fn launch' Sleep 500ms Enter
 Sleep 5s
-Type 'q' Enter
+Type 'q'
+Sleep 2s
+Type 'export FN_NO_ARGS_LAUNCH=1' Sleep 500ms Enter
+Sleep 2s
+Type 'fn' Sleep 500ms Enter
+Sleep 5s
+Type 'q'
+Sleep 1s
 Hide
 Type 'clear' Enter
 Show
