@@ -88,7 +88,7 @@ remove() {
 
 update() {
     echo "Fetching latest version..."
-    download="$name-dl-$(date +%s%N).sh"
+    download="$(mktemp -d)/$name-$(date +%s%N).sh"
     curl -fsSL "$source" -o "$download"
     chmod +x "$download"
     latest_version="$(./$download --version || echo "unknown")"
