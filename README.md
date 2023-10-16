@@ -25,7 +25,7 @@ fn [command]
 | `help`, `-h`, `--help`   | Display help message.          |
 | `-V`, `--version`        | Display current version.       |
 
-Any unrecognized commands or options will be passed to Newsboat. ~~For example, `fn -h` will show the Newsboat help message, **not** the help message for `fn`.~~ As of `v1.2.0`, the following options will be used by `fn`: `-h`, `--help`, `--version`, `-V`. If you want help with Newsboat, run `newsboat -h` directly (or `fn run -h`).
+Any unrecognized commands or options will be passed to Newsboat. ~~For example, `fn -h` will show the Newsboat help message, **not** the help message for `fn`.~~ As of [`v1.2.0`](https://github.com/uncenter/fn/releases/tag/v1.2.0), the following options will be accepted by `fn`: `-h`, `--help`, `--version`, `-V`. If you want help with Newsboat instead of `fn`, use `fn run -h` (or just `newsboat -h`).
 
 ## Installation
 
