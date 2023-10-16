@@ -8,7 +8,7 @@ name="fn"
 if [ -f "$install_dir/$name" ]; then
     echo "It looks like \`$name\` is already installed (at $install_dir/$name). Run \`$name update\` to update to the latest version."; exit 1
 fi
-download="$name-dl-$(date +%s%N).sh"
+download="$(mktemp -d)/$name-$(date +%s%N).sh"
 curl -fsSL "$source" -o "$download"
 chmod +x "$download"
 mkdir -p "$install_dir"
