@@ -56,16 +56,16 @@ EOF
 
 add() {
     if [ -z "$1" ]; then
-        echo "$name: command add: requires url argument"
+        echo "$name: add: requires url argument"
         exit 1
     fi
     for url in "$@"; do
         if [[ $url != http://* && $url != https://* ]]; then
-            echo "$name: command add: url argument must start with http:// or https://"
+            echo "$name: add: url argument must start with http:// or https://"
             continue
         fi
         if [[ $(grep "^$url$" "$urls") ]]; then
-            echo "$name: command add: '$url' already exists in URLs"
+            echo "$name: add: '$url' already exists in URLs"
             continue
         fi
         echo "$url" >> "$urls" && echo "Added '$url'."
@@ -74,12 +74,12 @@ add() {
 
 remove() {
     if [ -z "$1" ]; then
-        echo "$name: command remove: requires url arugment"
+        echo "$name: remove: requires url arugment"
         exit 1
     fi
     for url in "$@"; do
         if [[ ! $(grep "^$url$" "$urls") ]]; then
-            echo "$name: command remove: '$url' does not exist in URLs"
+            echo "$name: remove: '$url' does not exist in URLs"
             continue
         fi
         sd "^$url$\n" "" "$urls" && echo "Removed '$url'."
@@ -113,7 +113,7 @@ uninstall() {
             return 0
         fi
     fi
-    echo "$name: command uninstall: something went wrong"
+    echo "$name: uninstall: something went wrong"
     return 1
 }
 
@@ -140,7 +140,7 @@ case "$1" in
             cat "$urls"
             exit $?
         fi
-        echo "$name: command list: no URLs found"
+        echo "$name: list: no URLs found"
         exit 1
         ;;
     edit)
