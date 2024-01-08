@@ -91,7 +91,7 @@ update() {
     download="$(mktemp)"
     curl -fsSL "$source" -o "$download"
     chmod +x "$download"
-    latest_version="$(./$download --version || echo "unknown")"
+    latest_version="$($download --version || echo "unknown")"
     if cmp --silent $download $script_path; then
         rm "$download"
         echo "Already up to date."
