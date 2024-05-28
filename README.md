@@ -1,3 +1,10 @@
+<div align="center">
+	<h1>🚧 ARCHIVED 🚧</h1>
+	<h3>Use <a href="https://github.com/isabelroses/izrss">izrss</a> instead of Newsboat altogether.</h3>
+</div>
+
+---
+
 # `fn`
 
 ![Recording of using `fn` in the terminal](docs/demo.gif)
